@@ -2,8 +2,8 @@ version: "3"
 # Thanks to https://visibilityspots.org/dockerized-cloudflared-pi-hole.html
 # echo "alias dns-up='cd /path/to/folder; docker-compose up -d'" >> ~/.bash_profile
 services:
-  dns-over-https:
-    container_name: dns-over-https
+  doh-client:
+    container_name: doh-client
     image: fardog/secureoperator:latest # google dns
     # image: visibilityspots/cloudflared:amd64 # cloudflare dns
     restart: unless-stopped
@@ -14,14 +14,22 @@ services:
       - 8.8.8.8
       - 8.8.4.4
 
+  doh-server:
+    container_name: doh-server
+    image: satishweb/doh-server:v2.2.1
+    ports:
+      - "8053:8053/tcp"
+    environment:
+      - UPSTREAM_DNS_SERVER=udp:10.0.0.3:53 
+
   pi-hole:
     container_name: pi-hole
     image: pihole/pihole:v5.0-amd64
     restart: unless-stopped
     ports:
       - "8111:80/tcp"
-      - "53:53/tcp"
-      - "53:53/udp"
+      #- "53:53/tcp"
+      #- "53:53/udp"
     environment:
       - ServerIP=10.0.0.3
       - DNS1='10.0.0.2#53'
@@ -38,6 +46,8 @@ services:
       - 8.8.8.8
     cap_add:
       - NET_ADMIN
+    
+
 
 networks:
   pihole_net:
