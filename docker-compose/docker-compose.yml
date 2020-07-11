@@ -15,7 +15,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=postmaster@example.com"
+      - "--certificatesresolvers.myresolver.acme.email=postmaster@38911.net"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
@@ -23,7 +23,7 @@ services:
       - "8080:8080"
     volumes:
       - "./letsencrypt:/letsencrypt"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro":
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       pihole_net:
         ipv4_address: 10.0.0.4
@@ -61,7 +61,7 @@ services:
     container_name: pi-hole
     image: pihole/pihole:v5.0-amd64
     restart: unless-stopped
-    ports:
+    #ports:
       #- "8111:80/tcp"
       #- "53:53/tcp"
       #- "53:53/udp"
@@ -93,4 +93,4 @@ networks:
     driver: bridge
     ipam:
      config:
-       - subnet: 10.0.0.0/29
+       - subnet: 10.0.0.0/28
